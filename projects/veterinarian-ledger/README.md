@@ -10,27 +10,45 @@ Build a production-ready veterinary clinic ledger that supports:
 - Invoices, payments, and balances
 - Ledger/audit trail for financial changes
 
-## Single Command Trigger (Recommended)
-Run one command and let the framework generate everything needed for Ralph-loop autopilot:
+## True Ralph Loop (Repeated CLI Calls)
+Yes, this is run from your **local terminal** in your repo.
+
+### First command to run
+```bash
+bash projects/veterinarian-ledger/scripts/run-ralph-loop.sh \
+  --task VET-001 \
+  --repo /path/to/your/repo \
+  --workdir projects/veterinarian-ledger
+```
+
+This script repeatedly calls your agent CLI each iteration (task-by-task), tracks progress in `progress.txt`, writes logs in `logs/`, retries on failures, and stops when all tasks are complete.
+
+### Before running
+1. Put your PRD at `projects/veterinarian-ledger/PRD.md`
+2. Put tasks (one per line) at `projects/veterinarian-ledger/tasks.txt`
+   - You can start from `projects/veterinarian-ledger/templates/tasks.txt`
+3. Ensure your CLI command is available (default: `codex exec --skip-git-repo-check`)
+
+### Agent command override (optional)
+If you want to use another command:
+```bash
+bash projects/veterinarian-ledger/scripts/run-ralph-loop.sh \
+  --task VET-001 \
+  --repo /path/to/your/repo \
+  --workdir projects/veterinarian-ledger \
+  --agent-cmd "claude" \
+  --agent-args "--print"
+```
+
+## Single Prompt Autopilot (Optional)
+If you prefer one generated master prompt (manual paste/run), you can still use:
 
 ```bash
 bash projects/veterinarian-ledger/scripts/trigger-ralph-loop.sh \
   --task VET-001 \
   --feature "Intake + Billing MVP" \
-  --goal "Track visits, invoices, payments, and balances" \
-  --deadline "2026-04-01" \
-  --constraints "MVP in 2 sprints" \
-  --users "Receptionist,Veterinarian,Clinic Admin" \
-  --nfrs "auditability,idempotency,role-based access" \
-  --stack "Node.js,PostgreSQL,React" \
-  --repo /workspace/chat-gpt
+  --repo /path/to/your/repo
 ```
-
-This creates a runtime package at `projects/veterinarian-ledger/runtime/<TASK_ID>/` with:
-- `task-input.md`
-- `master-prompt.md`
-
-Then you only run the generated `master-prompt.md` in Codex/ChatGPT; it is written to execute all roles end-to-end automatically.
 
 ## Manual Prompt Flow (Optional)
 1. Run `prompts/00-orchestrator-kickoff.md`
@@ -57,4 +75,4 @@ Then you only run the generated `master-prompt.md` in Codex/ChatGPT; it is writt
 - Provide PR-ready summary
 
 ## Starter Command Example
-Use the single trigger command above. It auto-generates the full autopilot prompt and initializes the loop log if `projects/team-automation` exists.
+Use the true Ralph loop command above for iterative execution. Use `trigger-ralph-loop.sh` only if you want a one-shot generated prompt.
