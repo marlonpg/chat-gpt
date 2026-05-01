@@ -1,3 +1,4 @@
+<<<<<<< ours
 # Team Automation (Codex Agent Team)
 
 This project bootstraps a **multi-agent ChatGPT/Codex team** that works in a continuous "Ralph loop" style process.
@@ -137,3 +138,80 @@ You can add new roles by:
 3. Updating `workflows/ralph-loop.md` to include new handoff stages.
 4. Adding task templates for new responsibilities.
 
+=======
+=======
+>>>>>>> theirs
+# Team Automation Framework (Ralph Loop)
+
+`team-automation` is the automation/framework layer.
+Use it to run specialist agents in a loop against any project workspace.
+
+## Separation of Concerns
+- `projects/team-automation/` → framework assets only (agents, skills, scripts, logs, runtime).
+- `projects/<your-project>/` → product assets only (PRD, tasks, source code, docs).
+
+## Framework Structure
+```text
+projects/team-automation/
+├── agents/
+├── skills/
+├── workflows/
+├── templates/
+├── frameworks/
+│   └── veterinarian-ledger/
+│       ├── prompts/
+│       ├── task-input-template.md
+│       └── handoff-template.md
+├── scripts/
+│   ├── ralph-loop-runner.sh
+│   ├── generate-master-prompt.sh
+│   ├── run-loop.sh
+│   ├── handoff.sh
+│   └── status-report.sh
+├── logs/
+└── runtime/
+```
+
+## First Command (True Iterative Ralph Loop)
+From repo root:
+
+```bash
+bash projects/team-automation/scripts/ralph-loop-runner.sh \
+  --task VET-001 \
+  --repo /path/to/your/repo \
+  --project-dir projects/veterinarian-ledger
+```
+
+This repeatedly calls your agent CLI per task iteration until all tasks are marked `DONE`/`SKIP`.
+
+## Project Requirements
+Your project directory (e.g. `projects/veterinarian-ledger`) should contain:
+- `PRD.md`
+- `tasks.txt` (one task per line)
+- product code/docs only
+
+## Optional: One-shot Prompt Generator
+
+```bash
+bash projects/team-automation/scripts/generate-master-prompt.sh \
+  --task VET-001 \
+  --feature "Intake + Billing MVP" \
+  --project-dir projects/veterinarian-ledger \
+  --repo /path/to/your/repo
+```
+
+## Agent CLI Override
+Defaults: `codex exec --skip-git-repo-check`
+
+```bash
+bash projects/team-automation/scripts/ralph-loop-runner.sh \
+  --task VET-001 \
+  --repo /path/to/your/repo \
+  --project-dir projects/veterinarian-ledger \
+  --agent-cmd "claude" \
+  --agent-args "--print"
+```
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs

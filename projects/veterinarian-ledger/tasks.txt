@@ -1,0 +1,10 @@
+Phase1: Setup backend project and baseline dependencies
+Phase1: Create domain models and persistence schema
+Phase1: Implement authentication and authorization
+Phase1: Implement invoices + ledger APIs
+Phase1: Implement payments + allocation rules
+Phase2: Setup frontend app and auth flow
+Phase2: Build client/pet/visit screens
+Phase2: Build invoice + payments screens
+Phase2: Add dashboard and reporting summary
+Phase2: End-to-end validation and release notes

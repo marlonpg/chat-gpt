@@ -1,3 +1,5 @@
+<<<<<<< ours
+<<<<<<< ours
 # Veterinarian Ledger (Prompt Pack)
 
 This project contains a **prompt system** to build a Veterinarian Ledger application using the same role-based loop from `projects/team-automation`.
@@ -76,3 +78,37 @@ bash projects/veterinarian-ledger/scripts/trigger-ralph-loop.sh \
 
 ## Starter Command Example
 Use the true Ralph loop command above for iterative execution. Use `trigger-ralph-loop.sh` only if you want a one-shot generated prompt.
+=======
+=======
+>>>>>>> theirs
+# Veterinarian Ledger
+
+This directory is the **product workspace** for the Veterinarian Ledger service.
+
+## What belongs here
+- Product requirements (`PRD.md`)
+- Product task backlog (`tasks.txt`)
+- Domain docs (`docs/`)
+- Source code (`backend/`, `frontend/`, etc.)
+
+## What does NOT belong here
+Automation framework scripts, agents, and orchestration templates.
+Those live in: `projects/team-automation/`.
+
+## Run with Team Automation Ralph Loop
+From repo root:
+
+```bash
+bash projects/team-automation/scripts/ralph-loop-runner.sh \
+  --task VET-001 \
+  --repo /path/to/your/repo \
+  --project-dir projects/veterinarian-ledger
+```
+
+## Initial Files
+- `PRD.md` (create/update for your product scope)
+- `tasks.txt` (one task per line)
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
