@@ -2,47 +2,48 @@ package com.dailyjesus.service;
 
 import com.dailyjesus.domain.DailyMessageEntity;
 import com.dailyjesus.repo.DailyMessageRepository;
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class DevotionalService {
+    private static final Logger logger = LoggerFactory.getLogger(DevotionalService.class);
+
     private final DailyMessageRepository dailyMessageRepository;
-    private final String model;
+    private final ClaudeCodeService claudeCodeService;
 
     public DevotionalService(DailyMessageRepository dailyMessageRepository,
-                             @Value("${app.llm.model:openai/gpt-4o-mini}") String model) {
+                             ClaudeCodeService claudeCodeService) {
         this.dailyMessageRepository = dailyMessageRepository;
-        this.model = model;
+        this.claudeCodeService = claudeCodeService;
+        logger.info("DevotionalService initialized with Claude Code");
     }
 
     public DailyMessageEntity getOrCreateToday() {
-        return dailyMessageRepository.findByMessageDate(LocalDate.now()).orElseGet(this::generateForToday);
+        logger.info("Checking for devotional for today");
+        var existing = dailyMessageRepository.findByMessageDate(LocalDate.now());
+        if (existing.isPresent()) {
+            logger.info("Found existing devotional for today");
+            return existing.get();
+        }
+        logger.info("Generating new devotional for today");
+        return generateForToday();
     }
 
     private DailyMessageEntity generateForToday() {
-        String prompt = "Create one short Christian devotional with fields: TOPIC, VERSE_REF, VERSE_TEXT, REFLECTION.";
+        String prompt = "Output a Christian devotional in this exact format, with each field on a new line: TOPIC: Hope VERSE_REF: John 14:27 VERSE_TEXT: Peace I leave with you; my peace I give to you. REFLECTION: Jesus offers us His peace. When we trust in Him, we find calm in any storm. Now output a DIFFERENT devotional in the same format above, with new content for each field.";
         String output;
         try {
-            ProcessBuilder pb = new ProcessBuilder(List.of("gh", "models", "run", "--max-tokens", "220", model, prompt));
-            pb.redirectErrorStream(true);
-            pb.environment().put("GH_PROMPT_DISABLED", "1");
-            Process process = pb.start();
-            if (!process.waitFor(40, java.util.concurrent.TimeUnit.SECONDS) || process.exitValue() != 0) {
-                output = fallback();
-            } else {
-                try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                    output = br.lines().reduce("", (a,b) -> a + "\n" + b).trim();
-                }
-            }
+            logger.info("Calling Claude Code to generate devotional");
+            output = claudeCodeService.ask(prompt);
         } catch (Exception ex) {
+            logger.error("Exception calling Claude Code: {}", ex.getMessage(), ex);
             output = fallback();
         }
+
+        logger.info("Claude Code output:\n{}", output);
 
         DailyMessageEntity entity = new DailyMessageEntity();
         entity.setMessageDate(LocalDate.now());
@@ -50,18 +51,27 @@ public class DevotionalService {
         entity.setBibleReference(extract(output, "VERSE_REF", "Matthew 11:28"));
         entity.setBibleText(extract(output, "VERSE_TEXT", "Come to me, all who are weary and burdened, and I will give you rest."));
         entity.setReflectionText(extract(output, "REFLECTION", "Today, bring your burdens to Jesus. He sees you, loves you, and gives peace."));
-        entity.setLlmModel(model);
-        return dailyMessageRepository.save(entity);
+        entity.setLlmModel("claude-opus-4-6");
+        logger.info("Created devotional: topic='{}', reference='{}'", entity.getTopic(), entity.getBibleReference());
+        DailyMessageEntity saved = dailyMessageRepository.save(entity);
+        logger.info("Devotional saved to database with id={}", saved.getId());
+        return saved;
     }
 
     private String extract(String raw, String key, String fallback) {
         for (String line : raw.split("\\R")) {
-            if (line.toUpperCase().startsWith(key + ":")) return line.substring((key + ":").length()).trim();
+            if (line.toUpperCase().startsWith(key + ":")) {
+                String value = line.substring((key + ":").length()).trim();
+                logger.info("Extracted {}='{}'", key, value);
+                return value;
+            }
         }
+        logger.info("Field {} not found, using fallback", key);
         return fallback;
     }
 
     private String fallback() {
+        logger.warn("Using fallback devotional content");
         return "TOPIC: Hope\nVERSE_REF: Matthew 11:28\nVERSE_TEXT: Come to me, all who are weary and burdened, and I will give you rest.\nREFLECTION: Today, pause and pray. Jesus welcomes your heart and renews your strength.";
     }
 }
