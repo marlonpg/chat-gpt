@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find C:/Users/gamba/Documents/github/chat-gpt/src -type f -name *.java -o -name *.yml -o -name *.xml)",
+      "Bash(mvn clean:*)",
+      "Bash(java -version)",
+      "Bash(export JAVA_HOME=\"C:/Users/gamba/.jdks/corretto-25.0.1\")",
+      "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
+      "Bash(\"C:/Users/gamba/.jdks/corretto-25.0.1/bin/java\" -version)",
+      "Bash(where mvn:*)",
+      "Read(//c/Program Files/**)",
+      "Bash(ls -la mvnw*)",
+      "Bash(JAVA_HOME=\"C:/Users/gamba/.jdks/corretto-25.0.1\" ./mvnw clean package -DskipTests)",
+      "WebSearch",
+      "Bash(find C:/Users/gamba/Documents/github/vet-soap-notes -name *bot* -o -name *telegram*)",
+      "Bash(tasklist)",
+      "Bash(docker --version)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose ps:*)",
+      "Bash(JAVA_HOME=\"C:/Users/gamba/.jdks/corretto-25.0.1\" timeout 15 \"C:/Users/gamba/.jdks/corretto-25.0.1/bin/java\" -jar target/daily-devotional-bot-0.0.1-SNAPSHOT.jar)",
+      "Bash(JAVA_HOME=\"C:/Users/gamba/.jdks/corretto-25.0.1\" timeout 20 ./mvnw spring-boot:run)",
+      "Bash(jps -l)",
+      "Bash(kill 26708)",
+      "Bash(taskkill /PID 26708 /F)",
+      "Bash(pkill -f \"DailyDevotionalApplication\")",
+      "Bash(netstat -ano)",
+      "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" models --help)",
+      "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" models list 2>&1)",
+      "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" models run --help)",
+      "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" models run openai/gpt-4o-mini \"Say hello\" 2>&1)",
+      "Bash(\"C:/Program Files/GitHub CLI/gh.exe\" auth status 2>&1)",
+      "Skill(claude-api)",
+      "Bash(find C:/Users/gamba -name claude* -type f)",
+      "Bash(grep -E \"claude\\\\.\\(exe|cmd|bat\\)$\")",
+      "Bash(ls -la C:/Users/gamba/AppData/Roaming/npm/claude*)",
+      "Bash(pkill -f java)",
+      "Bash(\"C:/Users/gamba/AppData/Roaming/npm/claude.cmd\" code:*)",
+      "Bash(\"C:/Users/gamba/AppData/Roaming/npm/claude.cmd\" -p \"Say hello in one sentence\")",
+      "Bash(JAVA_HOME=\"C:/Users/gamba/.jdks/corretto-25.0.1\" timeout 30 ./mvnw spring-boot:run)",
+      "Bash(JAVA_HOME=\"C:/Users/gamba/.jdks/corretto-25.0.1\" ./mvnw spring-boot:run)"
+    ]
+  }
+}
