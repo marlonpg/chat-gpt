@@ -83,12 +83,24 @@ public class TelegramDevotionalBot implements SpringLongPollingBot, LongPollingS
                 send(chatId, "📖 " + d.getBibleReference() + "\n" + d.getBibleText() + "\n\n" + d.getReflectionText());
                 logger.info("Devotional sent to chatId={}", chatId);
             }
+        } else if ("#new-grace".equalsIgnoreCase(text)) {
+            logger.info("User #new-grace command: chatId={}, username={}", chatId, username);
+            var user = userRepository.findByTelegramChatId(chatId);
+            if (user.isEmpty() || !user.get().isActive()) {
+                logger.warn("User not subscribed: chatId={}, username={}", chatId, username);
+                send(chatId, "You are not subscribed. Send /start to subscribe to daily devotionals.");
+            } else {
+                var d = devotionalService.generateNew();
+                send(chatId, "📖 " + d.getBibleReference() + "\n" + d.getBibleText() + "\n\n" + d.getReflectionText());
+                logger.info("Fresh devotional sent to chatId={}", chatId);
+            }
         } else {
             logger.info("User sent unknown message: chatId={}, username={}, text={}", chatId, username, text);
             String helpMessage = "I didn't understand that command. Here are the available commands:\n\n"
                     + "#word - Get today's devotional\n"
                     + "#grace - Get today's devotional\n"
                     + "#daily - Get today's devotional\n"
+                    + "#new-grace - Get a fresh devotional\n"
                     + "/start - Subscribe to daily devotionals\n"
                     + "/stop - Unsubscribe from devotionals";
             send(chatId, helpMessage);

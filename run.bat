@@ -10,6 +10,12 @@ echo All logs will be displayed below:
 echo ================================
 echo.
 
+echo Building the application...
+call mvnw clean install
+echo.
+echo Build complete. Starting the application...
+echo.
+
 call mvnw spring-boot:run
 
 pause

@@ -32,8 +32,13 @@ public class DevotionalService {
         return generateForToday();
     }
 
+    public DailyMessageEntity generateNew() {
+        logger.info("Generating fresh devotional without cache check");
+        return generateForToday();
+    }
+
     private DailyMessageEntity generateForToday() {
-        String prompt = "Output a Christian devotional in this exact format, with each field on a new line: TOPIC: Hope VERSE_REF: John 14:27 VERSE_TEXT: Peace I leave with you; my peace I give to you. REFLECTION: Jesus offers us His peace. When we trust in Him, we find calm in any storm. Now output a DIFFERENT devotional in the same format above, with new content for each field.";
+        String prompt = "Output a Christian devotional in this exact format, with each field on a new line:\nTOPIC: [topic]\nVERSE_REF: [verse reference]\nVERSE_TEXT: [verse text]\nREFLECTION: [reflection]";
         String output;
         try {
             logger.info("Calling Claude Code to generate devotional");

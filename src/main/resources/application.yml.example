@@ -5,7 +5,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         jdbc:
@@ -14,8 +14,9 @@ spring:
     enabled: false
 telegram:
   bot:
-    token: 8749791169:AAFPnwwvVI4898Klw7EtYjX6YTrL0bwlN1A
-    username: DivineWordBot
+    token: ${TELEGRAM_BOT_TOKEN:your-bot-token-here}
+    username: ${TELEGRAM_BOT_USERNAME:your-bot-username}
+    payment-provider-token: ${TELEGRAM_PAYMENT_PROVIDER_TOKEN:}
 
 app:
   claude:

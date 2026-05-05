@@ -36,6 +36,7 @@ dependency-reduced-pom.xml
 .env.local
 application-local.yml
 application-dev.yml
+application.yml
 
 # Secrets & Credentials
 *.key
